@@ -1,0 +1,60 @@
+server:
+  port: 8010
+spring:
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 192.168.98.132:8848
+    gateway:
+      routes: #越精确的路由尽量往前放（配置写的顺序），因为匹配路由的时候以先写的为主，写在后面可能会被前面的提前匹配走了
+
+        - id: smarteye-stock-route
+          uri: lb://smarteye-stock      #lb代表负载均衡
+          predicates: #断言
+            - Path=/api/stock/**
+          filters:
+            - RewritePath=/api/(?<segment>.*),/$\{segment}  #路径重写
+
+        - id: smarteye-ware-route
+          uri: lb://smarteye-ware
+          predicates:
+            - Path=/api/ware/**
+          filters:
+            - RewritePath=/api/(?<segment>.*),/$\{segment}
+
+        - id: smarteye-purchase-route
+          uri: lb://smarteye-purchase
+          predicates:
+            - Path=/api/purchase/**
+          filters:
+            - RewritePath=/api/(?<segment>.*),/$\{segment}
+
+        - id: smarteye-integration-route
+          uri: lb://smarteye-integration
+          predicates:
+            - Path=/api/integration/**
+          filters:
+            - RewritePath=/api/(?<segment>.*),/$\{segment}
+
+        - id: smarteye-material-route
+          uri: lb://smarteye-material
+          predicates:
+            - Path=/api/material/**
+          filters:
+            - RewritePath=/api/(?<segment>.*),/$\{segment}
+
+        - id: smarteye-third-route
+          uri: lb://smarteye-third
+          predicates:
+            - Path=/api/third/**
+          filters:
+            - RewritePath=/api/(?<segment>.*),/$\{segment}
+
+        - id: smarteye-auth-route
+          uri: lb://smarteye-auth
+          predicates:
+            - Path=/api/auth/**
+          filters:
+            - RewritePath=/api/(?<segment>.*),/$\{segment}
+
+

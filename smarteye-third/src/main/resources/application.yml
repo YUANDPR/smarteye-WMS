@@ -1,0 +1,36 @@
+server:
+  port: 7009
+spring:
+  profiles:
+    active: dev
+  application:
+    name: smarteye-third
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 192.168.98.132:8848
+      config:
+        server-addr: 192.168.98.132:8848   #配置中心地址
+        file-extension: yaml          #指定yaml格式的配置
+        group: dev               #指定group,默认是DEFAULT_GROUP
+        namespace: 8d271cac-eee3-44b5-a8ad-d8bc29c87fb3 #指定namespace
+
+    alicloud: #配置阿里云存储，服务端签名直传
+      access-key: ${alicloud.access-key}
+      secret-key: ${alicloud.secret-key}
+      oss:
+        endpoint: oss-cn-hangzhou.aliyuncs.com
+      #配置阿里云短信服务（这是自定义属性配置）
+      sms:
+        accessKeyId: ${alicloud.access-key}
+        accessKeySecret: ${alicloud.secret-key}
+
+  #redis配置
+  redis:
+    host: 192.168.98.132
+    port: 6379
+    password:
+    database: 0    #Redis数据库索引（默认为0）
+  #指定SpringSession用Redis存储实现
+  session:
+    store-type：redis

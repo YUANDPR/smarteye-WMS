@@ -30,9 +30,6 @@ import java.util.Objects;
 public class SysMenuController {
     @Autowired
     private SysMenuService sysMenuService;
-//	@Autowired
-//	private ShiroService shiroService;
-
 
     /**
      * 导航菜单

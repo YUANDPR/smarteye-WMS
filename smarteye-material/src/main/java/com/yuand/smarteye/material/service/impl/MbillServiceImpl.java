@@ -3,6 +3,7 @@ package com.yuand.smarteye.material.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.mysql.cj.util.StringUtils;
 import com.yuand.common.constant.MaterialConstant;
 import com.yuand.common.utils.PageUtils;
 import com.yuand.common.utils.Query;
@@ -38,9 +39,24 @@ public class MbillServiceImpl extends ServiceImpl<MbillDao, MbillEntity> impleme
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
+
+        QueryWrapper<MbillEntity> wrapper = new QueryWrapper<>();
+
+
+        String wlId = (String) params.get("catelogId");
+        if (!StringUtils.isNullOrEmpty(wlId)) {
+            wrapper.eq("wl_id", wlId);
+        }
+
+        String status = (String) params.get("status");
+        if (!StringUtils.isNullOrEmpty(status)) {
+            wrapper.eq("status", status);
+        }
+
+
         IPage<MbillEntity> page = this.page(
                 new Query<MbillEntity>().getPage(params),
-                new QueryWrapper<MbillEntity>()
+                wrapper
         );
 
         return new PageUtils(page);

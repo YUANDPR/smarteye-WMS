@@ -16,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -38,7 +39,7 @@ import java.util.concurrent.TimeUnit;
  * 登录注册模块
  */
 @Slf4j
-@RestController
+@Controller
 @RequestMapping("auth")
 public class LoginController {
 
@@ -150,6 +151,7 @@ public class LoginController {
         }
     }
 
+    @ResponseBody
     @RequestMapping("/login") // 记得加requestbody，不然post请求参数封装不到vo中
     public R login(@RequestBody UserLoginVo vo, HttpServletResponse response, HttpSession session) {
         // 验证验证码
@@ -180,16 +182,17 @@ public class LoginController {
         }
     }
 
-    @RequestMapping("/loginout")
-    public String outlogin(HttpServletRequest request) {
+    @RequestMapping("/logout")
+    public R logout(HttpServletRequest request) {
         HttpSession session = request.getSession();
         session.invalidate();
-        return "redirect:http://auth.gulimall.com/login.html";
+        return R.ok();
     }
 
     /**
      * 验证码
      */
+    @ResponseBody
     @GetMapping("/captcha")
     public void captcha(HttpServletResponse response, String uuid) throws NoUUIDException, IOException {
         //response.setHeader("Cache-Control", "no-store, no-cache");

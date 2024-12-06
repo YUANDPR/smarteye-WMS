@@ -51,16 +51,6 @@ public class ShelfController {
     @RequestMapping("/list/{wlId}/shelfup")
     public R listshelfup(@PathVariable("wlId") Long wlId) {
         List<UpShelfInfoResp> res = shelfService.queryUpshelf(wlId);
-        //下面移除代码是毕临时删除的，正常没有下面删除代码和设置数值
-        for (int i = 0; i < 8; i++) {
-            res.remove(res.size() - 1);
-        }
-        res.get(0).setCount(14);
-        res.get(1).setCount(11);
-        res.get(2).setCount(9);
-        res.get(3).setCount(6);
-        res.get(4).setCount(5);
-        res.get(5).setCount(4);
         return R.ok().put("data", res);
     }
 

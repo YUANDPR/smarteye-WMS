@@ -13,7 +13,7 @@ import java.util.Map;
 /**
  * 异常统一处理，集中处理所有异常
  */
-@RestControllerAdvice(basePackages = "com.yan.smarteye.ware.controller") //指定处理哪个包下（位置）的异常
+@RestControllerAdvice(basePackages = "com.yuand.smarteye.ware.controller") //指定处理哪个包下（位置）的异常
 public class ExceptionControllerAdvice {
 
 

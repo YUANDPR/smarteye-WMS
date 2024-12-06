@@ -1,10 +1,12 @@
 package com.yuand.common.utils;
 
 import com.alibaba.fastjson.JSONObject;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 public class ChangeList {
 
     /**
@@ -28,7 +30,7 @@ public class ChangeList {
             }
             return null;
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("An error occurred", e);
         }
 
         return null;

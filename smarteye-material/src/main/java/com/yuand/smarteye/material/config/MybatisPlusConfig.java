@@ -8,7 +8,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @Configuration
 @EnableTransactionManagement //开启事务
-@MapperScan("com.yan.smarteye.material.dao")
+@MapperScan("com.yuand.smarteye.material.dao")
 public class MybatisPlusConfig {
     //引入分页插件
     @Bean

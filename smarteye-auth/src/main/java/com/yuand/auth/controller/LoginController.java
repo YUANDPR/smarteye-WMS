@@ -39,7 +39,7 @@ import java.util.concurrent.TimeUnit;
  * 登录注册模块
  */
 @Slf4j
-@Controller
+@RestController
 @RequestMapping("auth")
 public class LoginController {
 
@@ -57,7 +57,6 @@ public class LoginController {
      * 其中要实现：1.接口防刷
      * 2.60秒发送一次验证码
      */
-    @ResponseBody
     @GetMapping("/sms/sendcode")
     public R sendCode(@RequestParam("phone") String phone) {
         // 接口防刷
@@ -151,7 +150,6 @@ public class LoginController {
         }
     }
 
-    @ResponseBody
     @RequestMapping("/login") // 记得加requestbody，不然post请求参数封装不到vo中
     public R login(@RequestBody UserLoginVo vo, HttpServletResponse response, HttpSession session) {
         // 验证验证码
@@ -192,7 +190,6 @@ public class LoginController {
     /**
      * 验证码
      */
-    @ResponseBody
     @GetMapping("/captcha")
     public void captcha(HttpServletResponse response, String uuid) throws NoUUIDException, IOException {
         //response.setHeader("Cache-Control", "no-store, no-cache");

@@ -220,43 +220,9 @@ public class OnestockServiceImpl extends ServiceImpl<OnestockDao, OnestockEntity
         StockTypeEntity stockTypeEntity = stockTypeDao.selectById(onestockEntity.getStockTypeId());
         wareStockTo.setStockTypeName(stockTypeEntity.getStockTypeName());
         //3.远程调用，向wms中添加warestock库存,添加真实库存
-        //使用异步线程减少方法执行时间，因为涉及事务控制，用callable实现线程感知异常和返回结果
-        //fegin远程调用丢失上下文,复制一份上下文给新的线程
-        RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
-
-        //向线程池提交任务 有返回值
-        Future<R> result = threadPoolExecutor.submit(new Callable<R>() {
-            @Override
-            public R call() throws Exception {
-                //复制一份上下文给新的线程
-                RequestContextHolder.setRequestAttributes(requestAttributes);
-                R r = wareStockFeignService.add(wareStockTo);
-                return r;
-            }
-        });
-        //返回任务的执行结果
-        R r = null;
-        try {
-            Object o = result.get();
-            r = (R) o;
-        } catch (InterruptedException e) {
-            //异步线程处理异常，无需处理，不影响业务逻辑，有异常则 r=null，下面的判断一样会手动抛出异常
-        } catch (ExecutionException e) {
-            //异步线程处理异常，无需处理，不影响业务逻辑，有异常则 r=null，下面的判断一样会手动抛出异常
-        }
-        //不用关闭线程池，其他线程可能正在使用线程池，线程池全程保留即可
-        //threadPoolExecutor.shutdown();
-
-        //R r = wareStockFeignService.add(wareStockTo);
-        //4.检测所属stock，尝试上架stock （存入消息队列，晚上空闲执行）
-        //stockService.up(onestockEntity.getStockId());
-
-        if (r != null && r.getCode() == 0) {
-            //上架onestock
-            baseMapper.updateById(onestockEntity);
-            //发送消息到消息队列，进行整批上架确认,通过消息队列实现异步处理
-            rabbitTemplate.convertAndSend(RabbitMQConstant.STOCK_EXCHANGE, RabbitMQConstant.STOCK_UPSTOCKROUTINGKEY, onestockEntity);
-        } else {
+        wareStockFeignService.add(wareStockTo);
+        int upResult = baseMapper.updateById(onestockEntity);
+        if (upResult == 0) {
             throw new RuntimeException("添加库存失败");
         }
 

@@ -23,7 +23,7 @@ spring:
     #指定缓存类型为redis （自动配置会根据类型自动帮我们选择对应的（redis）缓存管理器）
     type: redis
     redis:
-      time-to-live: 3600000     # 过期时间
+      time-to-live: 59000     # 过期时间
       # key-prefix: CACHE_        # 如果指定了前缀，就使用指定的前缀，如果没有就默认使用缓存的名字作为前缀（前缀指@Cacheable的value属性）
       use-key-prefix: true      # 是否使用写入redis前缀,false的话redis中key就只有@Cacheable的key属性
       cache-null-values: true   # 是否允许缓存空值，解决缓存穿透问题（空值也给放到缓存，避免缓存穿透）

@@ -115,13 +115,12 @@ public class ShelfServiceImpl extends ServiceImpl<ShelfDao, ShelfEntity> impleme
             BeanUtils.copyProperties(shelfEntity, upShelfInfoResp);
             res.add(upShelfInfoResp);
         }
-        //有货的货架
-        List<UpShelfInfoResp> upres = baseMapper.queryUpshelfInfo(wlId);
-        //给有货的货架设置数量
+        //查询过期的货物数量
+        List<UpShelfInfoResp> upres = baseMapper.queryExpiredUpShelf(wlId);
         for (UpShelfInfoResp u : upres) {
             for (UpShelfInfoResp upShelfInfoResp : res) {
                 if (upShelfInfoResp.getShelfName().equals(u.getShelfName())) {
-                    upShelfInfoResp.setCount(u.getCount());
+                    upShelfInfoResp.setCount(100 - u.getCount());
                 }
             }
         }

@@ -14,8 +14,11 @@
     </resultMap>
 
 
-    <select id="queryUpshelfInfo" resultType="com.yuand.smarteye.stock.vo.UpShelfInfoResp">
-        SELECT COUNT(1) `count`, s.shelf_name shelfName
+    <select id="queryExpiredUpShelf" resultType="com.yuand.smarteye.stock.vo.UpShelfInfoResp">
+        SELECT ROUND(SUM(IF(DATEDIFF(CURDATE(), o.update_time)
+                                > o.quality_period, 1, 0)) / COUNT(*) * 100, 0)
+                   AS count,
+               s.shelf_name shelfName
         FROM gms_shelf s
                  JOIN gms_onestock o
                       ON s.shelf_name = o.shelf_name

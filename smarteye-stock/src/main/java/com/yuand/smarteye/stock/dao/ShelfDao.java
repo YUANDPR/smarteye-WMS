@@ -20,7 +20,7 @@ import java.util.List;
 public interface ShelfDao extends BaseMapper<ShelfEntity> {
     //查询wlId下的货架的上架情况（onestock）
     //有货的货架
-    List<UpShelfInfoResp> queryUpshelfInfo(@Param("wlId") Long wlId);
+    List<UpShelfInfoResp> queryExpiredUpShelf(@Param("wlId") Long wlId);
 
     //查询wlId下的货架的上架情况（onestock）详情
     List<UpShelfInfoVo> queryUpshelfInfodetial(@Param("wlId") Long wlId, @Param("shelfName") String shelfName);
